@@ -6,6 +6,5 @@ authors:
 resources:
   - ol.js
   - ol.css
-normalize_css: no
-load_type: d
+normalize_css: yes
 ...
