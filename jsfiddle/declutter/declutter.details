@@ -1,3 +1,4 @@
+---
 name: Declutter Bug Demo
 description: Shows two bugs with declutter activated in openlayers
 authors:
@@ -7,3 +8,4 @@ resources:
   - ol.css
 normalize_css: no
 load_type: d
+...
