@@ -117,17 +117,27 @@ export function getRenderPixel(event, pixel) {
  * @returns {?} Declutter tree.
  */
 export function renderDeclutterItems(frameState, declutterTree) {
+  const boxes = [];
   if (declutterTree) {
     declutterTree.clear();
   }
   const items = frameState.declutterItems;
-  for (let z = items.length - 1; z >= 0; --z) {
+  let length1 = items.length;
+  for (let z = length1 - 1; z >= 0; --z) {
     const item = items[z];
+    // console.log('item containing zindexitems', item);
     const zIndexItems = item.items;
-    for (let i = 0, ii = zIndexItems.length; i < ii; i += 3) {
-      declutterTree = zIndexItems[i].renderDeclutter(zIndexItems[i + 1], zIndexItems[i + 2], item.opacity, declutterTree);
+    let length = zIndexItems.length;
+    for (let i = 0, ii = length; i < ii; i += 3) {
+      // console.log('zIndexItems', 'Executor', 'box', 'feature');
+      // console.log('zIndexItems', zIndexItems[i], zIndexItems[i + 1], zIndexItems[i + 2]);
+      let result = zIndexItems[i].renderDeclutter(zIndexItems[i + 1], zIndexItems[i + 2], item.opacity, declutterTree);
+      declutterTree = result.declutterTree;
+      if(result.box) {
+        boxes.push(result.box);
+      }
     }
   }
   items.length = 0;
-  return declutterTree;
+  return {declutterTree: declutterTree, boxes: boxes};
 }

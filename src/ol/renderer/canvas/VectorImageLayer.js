@@ -96,7 +96,8 @@ class CanvasVectorImageLayerRenderer extends CanvasImageLayerRenderer {
               (vectorRenderer.replayGroupChanged ||
               !equals(skippedFeatures, newSkippedFeatures))) {
           vectorRenderer.renderFrame(imageFrameState, null);
-          renderDeclutterItems(imageFrameState, null);
+          let result = renderDeclutterItems(imageFrameState, null);
+          console.log('result in vector image layer', result);
           skippedFeatures = newSkippedFeatures;
           callback();
         }

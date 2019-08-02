@@ -192,7 +192,9 @@ class MapRenderer extends Disposable {
    * @param {?import("../PluggableMap.js").FrameState} frameState Frame state.
    */
   renderFrame(frameState) {
-    this.declutterTree_ = renderDeclutterItems(frameState, this.declutterTree_);
+    const result = renderDeclutterItems(frameState, this.declutterTree_);
+    // console.log('result in renderer/Map.js', result);
+    this.declutterTree_ = result.declutterTree;
   }
 
   /**

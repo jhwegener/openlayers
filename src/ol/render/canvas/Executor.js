@@ -3,8 +3,10 @@
  */
 import {getUid} from '../../util.js';
 import {equals} from '../../array.js';
-import {createEmpty, createOrUpdate,
-  createOrUpdateEmpty, extend, intersects} from '../../extent.js';
+import {
+  createEmpty, createOrUpdate,
+  createOrUpdateEmpty, extend, intersects
+} from '../../extent.js';
 import {lineStringLength} from '../../geom/flat/length.js';
 import {drawTextOnPath} from '../../geom/flat/textpath.js';
 import {transform2D} from '../../geom/flat/transform.js';
@@ -19,7 +21,13 @@ import {
   setFromArray as transformSetFromArray
 } from '../../transform.js';
 import {createCanvasContext2D} from '../../dom.js';
-import {labelCache, defaultTextAlign, measureTextHeight, measureAndCacheTextWidth, measureTextWidths} from '../canvas.js';
+import {
+  labelCache,
+  defaultTextAlign,
+  measureTextHeight,
+  measureAndCacheTextWidth,
+  measureTextWidths
+} from '../canvas.js';
 import Disposable from '../../Disposable.js';
 import RBush from 'rbush';
 
@@ -346,8 +354,8 @@ class Executor extends Disposable {
     const canvas = context.canvas;
     const strokePadding = strokeInstruction ? (strokeInstruction[2] * scale / 2) : 0;
     const intersects =
-        tmpExtent[0] - strokePadding <= canvas.width && tmpExtent[2] + strokePadding >= 0 &&
-        tmpExtent[1] - strokePadding <= canvas.height && tmpExtent[3] + strokePadding >= 0;
+      tmpExtent[0] - strokePadding <= canvas.width && tmpExtent[2] + strokePadding >= 0 &&
+      tmpExtent[1] - strokePadding <= canvas.height && tmpExtent[3] + strokePadding >= 0;
 
     if (snapToPixel) {
       x = Math.round(x);
@@ -421,11 +429,12 @@ class Executor extends Disposable {
    * @return {?} Declutter tree.
    */
   renderDeclutter(declutterGroup, feature, opacity, declutterTree) {
+    let box = {};
     if (declutterGroup && declutterGroup.length > 5) {
       const groupCount = declutterGroup[4];
       if (groupCount == 1 || groupCount == declutterGroup.length - 5) {
         /** @type {import("../../structs/RBush.js").Entry} */
-        const box = {
+        box = {
           minX: /** @type {number} */ (declutterGroup[0]),
           minY: /** @type {number} */ (declutterGroup[1]),
           maxX: /** @type {number} */ (declutterGroup[2]),
@@ -435,31 +444,44 @@ class Executor extends Disposable {
         if (!declutterTree) {
           declutterTree = new RBush(9);
         }
-        if (!declutterTree.collides(box)) {
-          declutterTree.insert(box);
-          for (let j = 5, jj = declutterGroup.length; j < jj; ++j) {
-            const declutterData = /** @type {Array} */ (declutterGroup[j]);
-            const context = declutterData[0];
-            const currentAlpha = context.globalAlpha;
-            if (currentAlpha !== opacity) {
-              context.globalAlpha = opacity;
-            }
-            if (declutterData.length > 11) {
-              this.replayTextBackground_(declutterData[0],
-                declutterData[13], declutterData[14], declutterData[15], declutterData[16],
-                declutterData[11], declutterData[12]);
-            }
-            drawImage.apply(undefined, declutterData);
-            if (currentAlpha !== opacity) {
-              context.globalAlpha = currentAlpha;
-            }
+        // console.log('declutter box', box);
+        // if (!declutterTree.collides(box)) {
+        // console.log('collision detected!', box);
+        box['collision'] = declutterTree.collides(box);
+        // }
+        declutterTree.insert(box);
+        for (let j = 5, jj = declutterGroup.length; j < jj; ++j) {
+          const declutterData = /** @type {Array} */ (declutterGroup[j]);
+          const context = declutterData[0];
+          // console.log('context', context);
+          context.beginPath();
+          context.moveTo(box.minX, box.minY);
+          context.lineTo(box.maxX, box.minY);
+          context.lineTo(box.maxX, box.maxY);
+          context.lineTo(box.minX, box.maxY);
+          context.lineTo(box.minX, box.minY);
+          context.strokeStyle = box.collision ? '#ff0000' : '#00ff00';
+          context.stroke();
+          const currentAlpha = context.globalAlpha;
+          if (currentAlpha !== opacity) {
+            context.globalAlpha = opacity;
           }
+          if (declutterData.length > 11) {
+            this.replayTextBackground_(declutterData[0],
+              declutterData[13], declutterData[14], declutterData[15], declutterData[16],
+              declutterData[11], declutterData[12]);
+          }
+          drawImage.apply(undefined, declutterData);
+          if (currentAlpha !== opacity) {
+            context.globalAlpha = currentAlpha;
+          }
+          // }
         }
         declutterGroup.length = 5;
         createOrUpdateEmpty(declutterGroup);
       }
     }
-    return declutterTree;
+    return {declutterTree: declutterTree, box: box};
   }
 
   /**
