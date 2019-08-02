@@ -4,7 +4,7 @@ description: Shows two bugs with declutter activated in openlayers
 authors:
   - Jan-Henning Wegener
 resourcces:
-  - https://github.com/jhwegener/openlayers/blob/master/jsfiddle/declutter/ol.response.js
-  - https://github.com/jhwegener/openlayers/blob/master/jsfiddle/declutter/ol.response.css
+  - https://github.com/jhwegener/openlayers/blob/master/jsfiddle/declutter/ol.js
+  - https://github.com/jhwegener/openlayers/blob/master/jsfiddle/declutter/ol.css
 normalize_css: yes
 ...
