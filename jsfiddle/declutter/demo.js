@@ -44,18 +44,18 @@ try {
     var symbol = feature.get('symbol');
     if ( symbol ) {
       try {
-        let center = ol.extent.getCenter(feature.getGeometry().getExtent());
+        var center = ol.extent.getCenter(feature.getGeometry().getExtent());
         imageStyle.setGeometry(new ol.geom.Point(center));
-        let iconSrc = symbol;
-        let rotation = 0,
+        var iconSrc = symbol;
+        var rotation = 0,
           rotateWithView = false;
-        let a_deg = feature.get('image_rotation');
+        var a_deg = feature.get('image_rotation');
         if (a_deg) {
           rotation = this.deg2rad(a_deg);
           rotateWithView = true;
         }
         textStyle.getText().setText('');
-        let icon = new ol.style.Icon({
+        var icon = new ol.style.Icon({
           src: iconSrc,
           crossOrigin: '',
           rotation: rotation,
@@ -100,7 +100,7 @@ try {
 
 
   var styleFunction = function(feature, resolution) {
-    let style = styles[feature.getGeometry().getType()]
+    var style = styles[feature.getGeometry().getType()]
 
     var name = feature.get('name');
     style.getText().setText(name);
