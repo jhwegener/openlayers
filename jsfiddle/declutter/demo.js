@@ -35,10 +35,6 @@ try {
     })
   });
 
-  var deg2rad = (degrees) => {
-    return (degrees * Math.PI) / 180;
-  }
-
   var getIconStyle = (feature, textStyle, resolution) => {
     var imageStyle = new ol.style.Style({});
     var symbol = feature.get('symbol');
@@ -61,14 +57,14 @@ try {
           rotation: rotation,
           rotateWithView: rotateWithView,
           scale: 0.3
-        })
+        });
         imageStyle.setImage(icon);
       } catch(error) {
         console.error(error);
       }
     }
     return [textStyle, imageStyle];
-  }
+  };
 
 
   var styles = {
@@ -100,12 +96,11 @@ try {
 
 
   var styleFunction = function(feature, resolution) {
-    var style = styles[feature.getGeometry().getType()]
+    var style = styles[feature.getGeometry().getType()];
 
     var name = feature.get('name');
     style.getText().setText(name);
-    const currentStyles = getIconStyle(feature, style, resolution);
-    return currentStyles;
+    return getIconStyle(feature, style, resolution);
   };
 
 
@@ -194,7 +189,7 @@ try {
         }
       }
     ]
-  }
+  };
 
   var features = (new ol.format.GeoJSON()).readFeatures(geojsonObject);
 
