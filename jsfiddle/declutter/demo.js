@@ -1,4 +1,5 @@
-var map = new ol.Map({
+
+map = new ol.Map({
   controls: ol.control.defaults(),
   interactions: ol.interaction.defaults(),
   target: document.getElementById('map'),
@@ -32,31 +33,36 @@ var textStyle = new ol.style.Text({
   })
 });
 
+var deg2rad = (degrees) => {
+  return (degrees * Math.PI) / 180;
+};
+
 var getIconStyle = (feature, textStyle, resolution) => {
   var imageStyle = new ol.style.Style({});
   var symbol = feature.get('symbol');
-  if (symbol) {
+  var scale = feature.get('scale');
+  if ( symbol ) {
     try {
-      var center = ol.extent.getCenter(feature.getGeometry().getExtent());
+      let center = ol.extent.getCenter(feature.getGeometry().getExtent());
       imageStyle.setGeometry(new ol.geom.Point(center));
-      var iconSrc = symbol;
-      var rotation = 0,
+      let iconSrc = symbol;
+      let rotation = 0,
         rotateWithView = false;
-      var a_deg = feature.get('image_rotation');
+      let a_deg = feature.get('image_rotation');
       if (a_deg) {
-        rotation = this.deg2rad(a_deg);
+        rotation = deg2rad(a_deg);
         rotateWithView = true;
       }
       textStyle.getText().setText('');
-      var icon = new ol.style.Icon({
+      let icon = new ol.style.Icon({
         src: iconSrc,
         crossOrigin: '',
         rotation: rotation,
         rotateWithView: rotateWithView,
-        scale: 0.3
+        scale: scale
       });
       imageStyle.setImage(icon);
-    } catch (error) {
+    } catch(error) {
       console.error(error);
     }
   }
@@ -92,12 +98,12 @@ var styles = {
 };
 
 
-var styleFunction = function (feature, resolution) {
-  var style = styles[feature.getGeometry().getType()];
+var styleFunction = function(feature) {
+  let style = styles[feature.getGeometry().getType()];
 
   var name = feature.get('name');
   style.getText().setText(name);
-  return getIconStyle(feature, style, resolution);
+  return getIconStyle(feature, style);
 };
 
 
@@ -159,7 +165,7 @@ var geojsonObject = {
       'geometry': {
         'type': 'MultiPolygon',
         'coordinates': [
-          [[[8.675387077972667, 49.41946734486006], [8.675363804469423, 49.419305894624536], [8.675597354531487, 49.41931004935347], [8.675601209489116, 49.419469099272774]]],
+          [[[8.675387077972667,49.41946734486006], [8.675363804469423, 49.419305894624536], [8.675597354531487, 49.41931004935347], [8.675601209489116, 49.419469099272774]]],
           [[[8.675551847549178, 49.41893966404972], [8.675553906369547, 49.418773864734305], [8.675351483999572, 49.41877697040352], [8.675338935498324, 49.4189380971415]]]
         ]
       },
@@ -181,8 +187,28 @@ var geojsonObject = {
       },
       'properties': {
         'name': 'with image',
-        'symbol': 'https://maps.deepmap.net/geo/www/eb_msinspire18_mbstyle/textures_gen/PNG_Gold-DellTechnologies_6567-DellEMC_Logo_Hz_Blue_Gry_4c.png',
+        'symbol': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/OSM_Logo.svg/400px-OSM_Logo.svg.png',
         'image_rotation': 1,
+        'scale': 0.2
+      }
+    },
+    {
+      'type': 'Feature',
+      'id': 'poly4',
+      'geometry': {
+        'type': 'Polygon',
+        'coordinates': [[
+          [8.675042115387319, 49.41902461036967],
+          [8.675231724123604, 49.41902926272414],
+          [8.67522831460208, 49.41893601615626],
+          [8.67503873794542, 49.41893735812915],
+        ]]
+      },
+      'properties': {
+        'name': 'with image 2',
+        'symbol': 'https://openlayers.org/en/latest/examples/resources/logo-70x70.png',
+        'image_rotation': 1,
+        'scale': 0.5
       }
     }
   ]
