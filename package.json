@@ -1,6 +1,6 @@
 {
   "name": "ol",
-  "version": "6.0.0-beta.12",
+  "version": "6.0.0-beta.15",
   "description": "OpenLayers mapping library",
   "keywords": [
     "map",
@@ -54,7 +54,7 @@
     "chaikin-smooth": "^1.0.4",
     "clean-css-cli": "4.3.0",
     "copy-webpack-plugin": "^5.0.3",
-    "coveralls": "3.0.5",
+    "coveralls": "3.0.6",
     "eslint": "^6.0.0",
     "eslint-config-openlayers": "^12.0.0",
     "expect.js": "0.3.1",
@@ -70,8 +70,8 @@
     "jsdoc": "3.6.3",
     "jsdoc-plugin-typescript": "^2.0.1",
     "karma": "^4.1.0",
-    "karma-chrome-launcher": "3.0.0",
-    "karma-coverage": "^1.1.2",
+    "karma-chrome-launcher": "3.1.0",
+    "karma-coverage": "^2.0.1",
     "karma-coverage-istanbul-reporter": "^2.0.5",
     "karma-firefox-launcher": "^1.1.0",
     "karma-mocha": "1.3.0",
@@ -97,11 +97,11 @@
     "typescript": "^3.4.5",
     "url-polyfill": "^1.1.5",
     "walk": "^2.3.9",
-    "webpack": "4.39.0",
+    "webpack": "4.39.3",
     "webpack-cli": "^3.3.2",
     "webpack-dev-middleware": "^3.6.2",
     "webpack-dev-server": "^3.3.1",
-    "yargs": "^13.2.2"
+    "yargs": "^14.0.0"
   },
   "eslintConfig": {
     "extends": "openlayers",
